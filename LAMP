@@ -1,6 +1,8 @@
 #!/bin/bash
 
-password="Dede59200@"
+# Get password for MariaDB
+echo "Enter password for MariaDB: "
+read password
 
 # Update packages
 sudo apt update
@@ -12,8 +14,7 @@ sudo apt install apache2 php php-cgi php-mysqli php-pear php-mbstring libapache2
 # Install MariaDB
 sudo apt install mariadb-server -y
 
-# secure MariaDB installation use password defined in variable
-sudo mysql_secure_installation 
+# auto config MariaDB
 
 # Install phpMyAdmin
 wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
