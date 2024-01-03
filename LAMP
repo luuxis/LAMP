@@ -1,0 +1,60 @@
+#!/bin/bash
+
+password="Dede59200@"
+
+# Update packages
+sudo apt update
+sudo apt full-upgrade -y
+
+# Install Apache and php
+sudo apt install apache2 php php-cgi php-mysqli php-pear php-mbstring libapache2-mod-php php-common php-phpseclib php-mysql -y
+
+# Install MariaDB
+sudo apt install mariadb-server -y
+
+# secure MariaDB installation use password defined in variable
+sudo mysql_secure_installation 
+
+# Install phpMyAdmin
+wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
+sudo mkdir -p /var/lib/phpmyadmin/tmp
+sudo chown -R www-data:www-data /var/lib/phpmyadmin
+sudo tar xvf phpMyAdmin-latest-all-languages.tar.gz --strip-components=1 -C /var/lib/phpmyadmin
+sudo cp /var/lib/phpmyadmin/config.sample.inc.php /var/lib/phpmyadmin/config.inc.php
+
+
+# Configure Apache
+sudo echo 'Alias /sql /usr/share/phpmyadmin
+<Directory /usr/share/phpmyadmin>
+    Options SymLinksIfOwnerMatch
+    DirectoryIndex index.php
+
+    <IfModule mod_php.c>
+        <IfModule mod_mime.c>
+            AddType application/x-httpd-php .php
+        </IfModule>
+        <FilesMatch ".+\.php$">
+            SetHandler application/x-httpd-php
+        </FilesMatch>
+
+        php_value include_path .
+        php_admin_value upload_tmp_dir /var/lib/phpmyadmin/tmp
+
+        php_admin_value open_basedir /usr/share/phpmyadmin/:/etc/phpmyadmin/:/var/lib/phpmyadmin/:/usr/share/php/php-gettext/:/usr/share/php/php-php-gettext/:/usr/share/javascript/:/usr/share/php/tcpdf/:/usr/share/doc/phpmyadmin/:/usr/share/php/phpseclib/
+        php_admin_value mbstring.func_overload 0
+    </IfModule>
+</Directory>
+
+# Désactiver accès web sur certains dossiers
+<Directory /usr/share/phpmyadmin/templates>
+    Require all denied
+</Directory>
+<Directory /usr/share/phpmyadmin/libraries>
+    Require all denied
+</Directory>
+<Directory /usr/share/phpmyadmin/setup/lib>
+    Require all denied
+</Directory>' > /etc/apache2/conf-available/phpmyadmin.conf
+sudo a2enconf phpmyadmin.conf
+sudo systemctl reload apache2
+
