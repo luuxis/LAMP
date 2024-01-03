@@ -15,6 +15,16 @@ sudo apt install apache2 php php-cgi php-mysqli php-pear php-mbstring libapache2
 sudo apt install mariadb-server -y
 
 # auto config MariaDB
+sudo mysql_secure_installation <<EOF
+n
+y
+$password
+$password
+y
+n
+y
+y
+EOF
 
 # Install phpMyAdmin
 wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
@@ -58,4 +68,10 @@ sudo echo 'Alias /sql /usr/share/phpmyadmin
 </Directory>' > /etc/apache2/conf-available/phpmyadmin.conf
 sudo a2enconf phpmyadmin.conf
 sudo systemctl reload apache2
+
+# Post install phpMyAdmin
+sudo sed -i "s/\$dbuser='';/\$dbuser='root';/g" /var/lib/phpmyadmin/config.inc.php
+sudo sed -i "s/\$dbpass='';/\$dbpass='$password';/g" /var/lib/phpmyadmin/config.inc.php
+sudo sed -i "s/\$dbname='phpmyadmin';/\$dbname='phpmyadmin';/g" /var/lib/phpmyadmin/config.inc.php
+
 
