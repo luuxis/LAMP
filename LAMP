@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Get password for MariaDB
-echo "Enter password for MariaDB: "
-read password
+read -p "Enter password for MariaDB: " password
 
 # Update packages
 sudo apt update
