@@ -73,6 +73,6 @@ sudo a2enconf phpmyadmin.conf
 sudo systemctl reload apache2
 
 # Post install phpMyAdmin
-sudo sed -i "s/\$dbuser='';/\$dbuser='root';/g" /var/lib/phpmyadmin/config.inc.php
-sudo sed -i "s/\$dbpass='';/\$dbpass='$password';/g" /var/lib/phpmyadmin/config.inc.php
-sudo sed -i "s/\$dbname='phpmyadmin';/\$dbname='phpmyadmin';/g" /var/lib/phpmyadmin/config.inc.php
+sudo sed -i "s/\$dbuser='';/\$dbuser='root';/g" /usr/share/phpmyadmin/config.inc.php
+sudo sed -i "s/\$dbpass='';/\$dbpass='$password';/g" /usr/share/phpmyadmin/config.inc.php
+sudo sed -i "s/\$dbname='phpmyadmin';/\$dbname='phpmyadmin';/g" /usr/share/phpmyadmin/config.inc.php
