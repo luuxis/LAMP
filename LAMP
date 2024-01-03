@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Get password for MariaDB
-$password = "root"
+read -p "Enter password for MariaDB: " password
+echo ""
 
 # Update packages
 sudo apt update
@@ -29,10 +30,11 @@ expect "Reload privilege tables now? [Y/n]" { send "y\r" }
 
 # Install phpMyAdmin
 wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
-sudo mkdir -p /var/lib/phpmyadmin/tmp
-sudo chown -R www-data:www-data /var/lib/phpmyadmin
-sudo tar xvf phpMyAdmin-latest-all-languages.tar.gz --strip-components=1 -C /var/lib/phpmyadmin
-sudo cp /var/lib/phpmyadmin/config.sample.inc.php /var/lib/phpmyadmin/config.inc.php
+sudo mkdir -p /usr/share/phpmyadmin
+sudo chown -R www-data:www-data /usr/share/phpmyadmin
+sudo tar xvf phpMyAdmin-latest-all-languages.tar.gz --strip-components=1 -C /usr/share/phpmyadmin
+sudo cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php
+sudo rm phpMyAdmin-latest-all-languages.tar.gz
 
 
 # Configure Apache
